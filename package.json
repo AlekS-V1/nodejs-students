@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-hw",
+  "name": "nodejs-students",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlekS-V1/nodejs-hw.git"
+    "url": "git+https://github.com/AlekS-V1/nodejs-students.git"
   },
   "keywords": [],
   "author": "Alexandr Vakulin <alexvakulin@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AlekS-V1/nodejs-hw/issues"
+    "url": "https://github.com/AlekS-V1/nodejs-students/issues"
   },
-  "homepage": "https://github.com/AlekS-V1/nodejs-hw#readme",
+  "homepage": "https://github.com/AlekS-V1/nodejs-students#readme",
   "devDependencies": {
     "@eslint/js": "^9.38.0",
     "eslint": "^9.38.0",

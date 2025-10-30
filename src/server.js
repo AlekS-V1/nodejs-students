@@ -25,18 +25,19 @@ app.use(
 
 const PORT = process.env.PORT ?? 3000;
 
-app.get('/notes', (req, res) => {
-    res.status(200).json({
-        message: "Retrievedd all notes",
-    });
+// Кореневий маршрут
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello, World!' });
 });
 
-app.get('/notes/:noteId', (req, res) => {
+app.get('/users', (req, res) => {
+    res.status(200).json([{ id: 1, name: 'Alice' }]);
+});
+
+app.get('/users/:userId', (req, res) => {
     console.log(req.params);
-    const { noteId } = req.params;
-    res.status(200).json({
-        message: `Retrieved note with ID: ${noteId}`
-    });
+    const { userId } = req.params;
+    res.status(200).json({ id: userId, name: 'Jacob' });
 });
 
 
