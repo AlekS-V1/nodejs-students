@@ -11,9 +11,9 @@ const PORT = process.env.PORT ?? 3000; // Використання змінни�
 
 // Middleware для парсингу JSON і додає його у req.body
 app.use(express.json());
-
-app.use(cors()); // Дозволяє запити з будь-яких джерел
-
+// Дозволяє запити з будь-яких джерел
+app.use(cors());
+// Допомагає відслідковувати, як працює застосунок
 app.use(pino({
   level: 'info',
   transport: {
