@@ -1,7 +1,7 @@
 // src/routes/studentsRoutes.js
 
 import { Router } from 'express';
-import {getStudents, getStudentId} from '../controllers/studentsController.js';
+import {getStudents, getStudentId, createdStudent, deleteStudent, updateStudent} from '../controllers/studentsController.js';
 
 const router = Router();
 
@@ -20,5 +20,11 @@ router.get('/students/:studentId', getStudentId);
 //   }
 //   res.status(200).json(student);
 // }); тепер у controllers/studentsController.js
+
+router.post('/students', createdStudent);
+
+router.delete('/students/:studentId', deleteStudent);
+
+router.patch('/students/:studentId', updateStudent);
 
 export default router;

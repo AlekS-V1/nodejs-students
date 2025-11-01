@@ -26,3 +26,40 @@ export const getStudentId = async (req, res, next) => {
 
   res.status(200).json(student);
 };
+
+// Створення нового студента з додаванням до колекції
+export const createdStudent = async (req, res) => {
+  const student = await Student.create(req.body);
+  res.status(201).json(student);
+};
+
+// Видалення студента/документа з колекції
+export const deleteStudent = async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await Student.findOneAndDelete({
+    _id: studentId,
+  });
+  if (!student) {
+    next(createHttpError(404, "Student not found"));
+    return;
+  }
+  res.status(200).json(student);
+};
+
+// Оновити окремі дані студента
+
+export const updateStudent = async (req, res, next) => {
+  const { studentId } = req.params;
+  const student = await Student.findOneAndUpdate(
+    { _id: studentId }, // Шукаємо по id
+    req.body,
+    { new: true }, // повертаємо оновлений документ
+  );
+
+  if (!student) {
+    next(createHttpError(404, 'Student not found'));
+    return;
+  }
+
+  res.status(200).json(student);
+};
