@@ -31,4 +31,16 @@ const studentSchema = new Schema(
   },
 );
 
+// Додаємо текстовий індекс: кажемо MongoDB, що по полю name можна робити $text
+studentSchema.index(
+  { name: 'text' },
+
+  {
+    name: 'StudentTextIndex',
+    weights: { name: 10 },
+    default_language: 'english'
+  }
+
+);
+
 export const Student = model('Student', studentSchema);

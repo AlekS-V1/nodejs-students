@@ -3,10 +3,64 @@
 import { Student } from "../models/student.js";
 import createHttpError from 'http-errors';
 
-// Отримати список усіх студентів
+// Отримати список усіх студентів згідно умов пагінациї
 export const getStudents = async (req, res) => {
-  const students = await Student.find();
-  res.status(200).json(students);
+  // Отримуємо пара метри пагінації
+  const {
+    page = 1,
+    perPage = 10,
+    gender,
+    minAvgMark,
+    search,
+    // Отримуємо значення параметрів сортування
+    // дефолтне сортування по _id
+    sortBy = '_id',
+    sortOrder = 'asc'
+  } = req.query;
+// визначаємо, скільки записів пропустити для зсуву на потрібну сторінку
+  const skip = (page - 1) * perPage;
+
+  // Створюємо опис базового запиту до колекції
+  const studentsQuery = Student.find();
+
+  // Текстовий пошук по name (працює лише якщо створено текстовий індекс)
+  if (search) {
+    studentsQuery.where({
+      $text: { $search: search }
+    });
+  }
+
+  // Будуємо фільтрацію:
+  // -Фільтр за статтю
+  if (gender) {
+    studentsQuery.where('gender').equals(gender);
+  }
+  // -Фільтр за середнім балом
+  if (minAvgMark) {
+    studentsQuery.where('avgMark').gte(minAvgMark);
+  }
+
+  // Пагінація + сортування:
+  // Виконуємо одразу два запити паралельно
+  const [totalItems, students] = await Promise.all([
+    studentsQuery.clone().countDocuments(),
+    studentsQuery
+      .skip(skip)
+      .limit(perPage)
+    // Додамєдо сортування в ланцюжок методів квері
+      .sort({[sortBy]: sortOrder}),
+  ]);
+
+  // Обчислюємо загальну кількість «сторінок»
+  const totalPages = Math.ceil(totalItems / perPage);
+  // const students = await Student.find();
+  res.status(200).json({
+    page,
+    perPage,
+    totalItems,
+    totalPages,
+    students,
+  });
 };
 
 // Отримати одного студента за id

@@ -8,6 +8,7 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import studentsRoutes from './routes/studentsRoutes.js';
+import { errors } from 'celebrate';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000; // Використання змінних
@@ -92,7 +93,10 @@ app.use(notFoundHandler);
 //   res.status(404).json({ message: 'Route not found' });
 // });
 
-// Middleware Error для обробки помилок, якщо під час запиту виникла помилка  (останнє)
+// обробка помилок від celebrate (валідація)
+app.use(errors());
+
+// Middleware Error для глобальної обробки помилок, якщо під час запиту виникла помилка  (останнє)
 app.use(errorHandler);
 // app.use((err, req, res, next) => {
 //   console.error('Error: ', err.message);
