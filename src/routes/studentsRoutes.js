@@ -1,11 +1,26 @@
 // src/routes/studentsRoutes.js
 
 import { Router } from 'express';
-import {getStudents, getStudentId, createdStudent, deleteStudent, updateStudent} from '../controllers/studentsController.js';
+import {
+  getStudents,
+  getStudentId,
+  createdStudent,
+  deleteStudent,
+  updateStudent,
+} from '../controllers/studentsController.js';
 import { celebrate } from 'celebrate';
-import { createStudentSchema, getStudentsSchema, studentIdParamSchema, updateStudentSchema } from '../validations/studentsValidation.js';
+import {
+  createStudentSchema,
+  getStudentsSchema,
+  studentIdParamSchema,
+  updateStudentSchema,
+} from '../validations/studentsValidation.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
+
+// Додаємо middleware до всіх шляхів, що починаються з /students
+router.use('/students', authenticate);
 
 router.get('/students', celebrate(getStudentsSchema), getStudents);
 // router.get('/students', async (req, res) => {
@@ -13,7 +28,11 @@ router.get('/students', celebrate(getStudentsSchema), getStudents);
 //   res.status(200).json(students);
 // }); тепер у controllers/studentsController.js
 
-router.get('/students/:studentId', celebrate(studentIdParamSchema), getStudentId);
+router.get(
+  '/students/:studentId',
+  celebrate(studentIdParamSchema),
+  getStudentId,
+);
 // router.get('/students/:studentId', async (req, res) => {
 //   const { studentId } = req.params;
 //   const student = await Student.findById(studentId);
@@ -25,8 +44,16 @@ router.get('/students/:studentId', celebrate(studentIdParamSchema), getStudentId
 
 router.post('/students', celebrate(createStudentSchema), createdStudent);
 
-router.delete('/students/:studentId', celebrate(studentIdParamSchema), deleteStudent);
+router.delete(
+  '/students/:studentId',
+  celebrate(studentIdParamSchema),
+  deleteStudent,
+);
 
-router.patch('/students/:studentId', celebrate(updateStudentSchema), updateStudent);
+router.patch(
+  '/students/:studentId',
+  celebrate(updateStudentSchema),
+  updateStudent,
+);
 
 export default router;

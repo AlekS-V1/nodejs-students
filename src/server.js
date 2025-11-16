@@ -2,13 +2,15 @@
 
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';  // Такий імпорт одразу ініціалізує бібліотеку
+import 'dotenv/config'; // Такий імпорт одразу ініціалізує бібліотеку
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import studentsRoutes from './routes/studentsRoutes.js';
+import authRoutes from '../src/routes/authRoutes.js';
 import { errors } from 'celebrate';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000; // Використання змінних
@@ -36,6 +38,8 @@ app.use(express.json());
 // Дозволяє запити з будь-яких джерел/доменів
 app.use(cors());
 
+// підключаємо парсер кук
+app.use(cookieParser());
 
 // Логування часу
 
@@ -78,6 +82,9 @@ app.use((req, res, next) => {
 //   res.status(200).json(student);
 // });
 
+// підключаємо групу маршрутів користувача
+app.use(authRoutes);
+
 // підключаємо групу маршрутів студента
 app.use(studentsRoutes);
 
@@ -85,7 +92,6 @@ app.use(studentsRoutes);
 // app.get('/test-error', (req, res) => {
 //   throw new Error('Something went wrong');
 // });
-
 
 // Middleware 404 — якщо маршрут не знайдено (після всіх маршрутів)
 app.use(notFoundHandler);

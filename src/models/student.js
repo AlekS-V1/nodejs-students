@@ -24,6 +24,11 @@ const studentSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    userid: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -38,9 +43,8 @@ studentSchema.index(
   {
     name: 'StudentTextIndex',
     weights: { name: 10 },
-    default_language: 'english'
-  }
-
+    default_language: 'english',
+  },
 );
 
 export const Student = model('Student', studentSchema);
