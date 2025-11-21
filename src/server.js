@@ -11,6 +11,7 @@ import studentsRoutes from './routes/studentsRoutes.js';
 import authRoutes from '../src/routes/authRoutes.js';
 import { errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000; // Використання змінних
@@ -84,6 +85,9 @@ app.use((req, res, next) => {
 
 // підключаємо групу маршрутів користувача
 app.use(authRoutes);
+
+// Маршрут, за яким ми дозволимо змінювати аватар
+app.use(userRoutes);
 
 // підключаємо групу маршрутів студента
 app.use(studentsRoutes);
